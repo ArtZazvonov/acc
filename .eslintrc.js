@@ -14,5 +14,10 @@ module.exports = {
   plugins: [
   ],
   // add your custom rules here
-  rules: {}
+  rules: {
+    'vue/singleline-html-element-content-newline': 'off',
+    'vue/multiline-html-element-content-newline': 'off',
+    'eslint-disable vue/html-indent': 'off',
+    'no-tabs': 0
+  }
 }

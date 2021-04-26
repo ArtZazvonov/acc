@@ -1,0 +1,13 @@
+*{
+  box-sizing: border-box;
+}
+#__nuxt,#__layout{
+  height: 100%;
+}
+#__nuxt{
+  max-height: 100vh;
+}
+
+html, body{
+  height: 100%;
+}
