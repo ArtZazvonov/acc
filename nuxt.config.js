@@ -1,4 +1,9 @@
-export default {
+/* eslint-disable nuxt/no-cjs-in-config */
+require('dotenv').config()
+module.exports = {
+  publicRuntimeConfig: {
+    baseURL: process.env.NODE_ENV === 'production' ? 'http://localhost:3000' : 'http://localhost:3000'
+  },
   head: {
     title: 'aps',
     htmlAttrs: {
@@ -14,8 +19,8 @@ export default {
     ]
   },
   css: [
-    './assets/normalize.css',
-    './assets/scss/style.scss'
+    '@/assets/normalize.css',
+    '@/assets/scss/style.scss'
   ],
   plugins: [
     '@/plugins/globals',
@@ -27,14 +32,18 @@ export default {
   ],
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/dotenv',
     '@nuxtjs/style-resources'
   ],
+  axios: {},
+  dotenv: {
+    systemvars: true
+  },
   styleResources: {
     scss: [
-      './assets/scss/styleResource/variables.scss'
+      '@/assets/scss/styleResource/variables.scss'
     ]
   },
-  axios: {},
   build: {
     extractCSS: true,
     optimization: {

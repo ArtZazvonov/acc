@@ -3,15 +3,7 @@
     <div class="logo">
       <span>aps</span>
     </div>
-    <nav class="navigation">
-      <ul>
-        <li>item</li>
-        <li>item</li>
-        <li>item</li>
-        <li>item</li>
-        <li>item</li>
-      </ul>
-    </nav>
+    <button type="button" class="app-btn btn-login" @click.prevent="$router.push('/ticket/create')">Создать тикет</button>
     <button v-if="isAuth" type="button" class="app-btn btn-login" @click.prevent="logOut">выход</button>
   </header>
 </template>

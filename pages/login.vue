@@ -1,5 +1,5 @@
 <template>
-  <ValidationObserver ref="form" tag="form" @submit.prevent="formValidate">
+  <ValidationObserver ref="form" tag="form" @submit.prevent="onSubmit">
     <ValidationProvider v-slot="{ errors }" tag="div" name="login" vid="login" rules="">
       <label for="login">Логин</label>
       <input v-model="formData.login" type="text" name="login">
@@ -37,24 +37,21 @@ export default {
     }
   },
   methods: {
-    formValidate () {
-      this.$refs.form.validate().then((success) => {
+    onSubmit () {
+      this.$refs.form.validate().then(async (success) => {
         if (success) {
-          this.onSubmit()
+          try {
+            const form = {
+              login: this.formData.login,
+              password: this.formData.password
+            }
+            await this.$store.dispatch('auth/LOGIN', form)
+            this.$router.push('/')
+          } catch (e) {
+            console.log(e)
+          }
         }
       })
-    },
-    async onSubmit () {
-      try {
-        const form = {
-          login: this.formData.login,
-          password: this.formData.password
-        }
-        await this.$store.dispatch('auth/LOGIN', form)
-        this.$router.push('/')
-      } catch (e) {
-        console.log(e)
-      }
     }
   }
 }
