@@ -28,6 +28,11 @@ export default {
   data () {
     return {}
   },
+  computed: {
+    // allTickets () {
+    //   return this.$store.getters('ticket/allTickets')
+    // }
+  },
   methods: {
     ticketMore (e) {
       const item = e.target.closest('.ticket')

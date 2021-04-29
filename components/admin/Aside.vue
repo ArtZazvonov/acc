@@ -3,13 +3,7 @@
     <div class="aside-control__btn" @click="asideHide()">X</div>
     <div class="aside-menu">
       <div class="aside-menu__item">
-        <nuxt-link exact to="/ticket/list">Открытые заявки</nuxt-link>
-      </div>
-      <div class="aside-menu__item">
-        <a href="/">Сотрудники</a>
-      </div>
-      <div class="aside-menu__item">
-        <a href="/">Список контактов ДОУ</a>
+        <nuxt-link exact to="/admin/createuser">Создание пользователя</nuxt-link>
       </div>
     </div>
   </div>

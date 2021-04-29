@@ -2,18 +2,18 @@ const { model, Schema } = require('mongoose')
 
 const ticketSchema = new Schema({
   client: {
-    type: String,
-    unique: true,
-    required: true
+    type: String
+    // unique: true,
+    // required: true
   },
-  adress: {
-    type: String,
-    unique: true,
-    required: true
+  address: {
+    type: String
+    // unique: true,
+    // required: false
   },
   phone: {
-    type: String,
-    unique: true
+    type: String
+    // unique: true
   },
   date: {
     type: Date,

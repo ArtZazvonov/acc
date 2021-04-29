@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt-nodejs')
 const jwt = require('jsonwebtoken')
 const keys = require('../keys')
 const User = require('../models/user.modal')
+// CLIENT
 module.exports.login = async (req, res) => {
   const candidate = await User.findOne({ login: req.body.login })
   if (candidate) {
@@ -23,17 +24,25 @@ module.exports.login = async (req, res) => {
     })
   }
 }
-module.exports.createUser = async (req, res) => {
+// ADMIN
+module.exports.adminLogin = async (req, res) => {
   const candidate = await User.findOne({ login: req.body.login })
   if (candidate) {
-    res.status(409).json({ message: 'Логин уже сужествует' })
+    const isPasswordCorrect = bcrypt.compareSync(req.body.password, candidate.password)
+    if (isPasswordCorrect) {
+      const token = jwt.sign({
+        login: candidate.login,
+        userId: candidate._id
+      }, keys.JWT, { expiresIn: 60 * 60 })
+      res.json({ token })
+    } else {
+      res.status(401).json({
+        messege: 'Пароль не верен'
+      })
+    }
   } else {
-    const solt = bcrypt.genSaltSync(10)
-    const user = new User({
-      login: req.body.login,
-      password: bcrypt.hashSync(req.body.password, solt)
+    res.status(404).json({
+      messege: 'Пользователь не найден'
     })
-    await user.save()
-    res.status(201).json(user)
   }
 }

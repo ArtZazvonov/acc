@@ -25,7 +25,7 @@ export const getters = {}
 export const mutations = {}
 
 export const actions = {
-  async fetch () {
+  async fetch (context) {
     return await new Promise((resolve) => {
       setTimeout(() => {
         resolve(tickets)
@@ -45,12 +45,14 @@ export const actions = {
   async update ({ state }, ticket) {
     await console.log('Тикет: ' + ticket.id + ' обновлен с текстом: ' + ticket.description)
   },
-  async create (context, newTicket) {
-    const maxID = tickets.reduce((acc, el) => { return acc > el.id ? acc : el.id })
-    newTicket.id = maxID + 1
-    newTicket.date = new Date().toLocaleString()
-    newTicket.status = 'new'
-    tickets.push(newTicket)
-    await console.log('Тикет: ' + { newTicket } + ' добавлен')
+  async create ({ commit }, newTicket) {
+    try {
+      await this.$axios.$post('/api/ticket/create', newTicket)
+      console.log('Store: Тикет создан ' + newTicket)
+      this.$router.push('/ticket/list')
+    } catch (e) {
+      commit('SET_ERROR', e, { root: true })
+      throw e
+    }
   }
 }

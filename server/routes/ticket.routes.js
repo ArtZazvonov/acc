@@ -3,11 +3,12 @@ const { Router } = require('express')
 const ctr = require('../controllers/ticket.controller')
 const router = Router()
 
-// /api/ticket/login
-router.post('/', passport.authenticate('jwt', { session: false }), ctr.createTicket)
+// /api/ticket/
+// router.post('/', passport.authenticate('jwt', { session: false }), ctr.createTicket)
+router.post('/create', ctr.createTicket)
 
-router.get('/', passport.authenticate('jwt', { session: false }), ctr.getAllTicket)
-
+router.get('/getAllTicket', ctr.getAllTicket)
+// /api/ticket/:id
 router.get('/:id', passport.authenticate('jwt', { session: false }), ctr.getTicket)
 
 router.put('/:id', passport.authenticate('jwt', { session: false }), ctr.updateTicket)

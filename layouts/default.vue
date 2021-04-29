@@ -34,7 +34,7 @@ export default {
   },
   watch: {
     isError (val) {
-      console.log(val)
+      alert(val.response.data.messege)
     }
   },
   mounted () {},

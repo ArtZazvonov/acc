@@ -24,6 +24,7 @@ module.exports = {
   ],
   plugins: [
     '@/plugins/globals',
+    '@/plugins/axios',
     { src: '@plugins/vee-validate', ssr: false }
   ],
   components: true,

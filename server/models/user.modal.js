@@ -10,6 +10,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
     minLength: 6
+  },
+  role: {
+    type: Number,
+    default: 0
   }
 })
 
