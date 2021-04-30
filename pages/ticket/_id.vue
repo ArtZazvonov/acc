@@ -1,5 +1,6 @@
 <template>
   <div>
+    <pre>{{ ticket }}</pre>
     <button type="button" @click.prevent="$router.push('/ticket/list')">К списку тикетов</button>
     <p>{{ ticket.id }}</p>
     <p>{{ ticket.date }}</p>
@@ -22,7 +23,7 @@ export default {
     return Boolean(params.id)
   },
   async asyncData ({ store, params }) {
-    const ticket = await store.dispatch('ticket/fetchById', params.id)
+    const ticket = await store.dispatch('ticket/ticket', params.id)
     return { ticket }
   },
   data () {

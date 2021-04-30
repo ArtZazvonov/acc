@@ -3,7 +3,7 @@
     <div v-for="(ticket, index) in tickets" :key="index" class="ticket">
       <div class="ticket-header">
         <div class="ticket-header-cols ticket-date"><span>{{ ticket.date }}</span></div>
-        <div class="ticket-header-cols ticket-status"><span>{{ ticket.status }}</span></div>
+        <div class="ticket-header-cols ticket-status"><span></span><b>{{ ticket.status }}</b></div>
         <div class="ticket-header-cols ticket-number"># {{ ticket.id }}</div>
         <div class="ticket-header-cols ticket-client">{{ ticket.client }}</div>
         <div class="ticket-header-cols ticket-phone"><a :href="'tel:'+ticket.phone">{{ ticket.phone }}</a></div>
@@ -22,16 +22,8 @@
 <script>
 export default {
   async asyncData ({ store }) {
-    const tickets = await store.dispatch('ticket/fetch')
+    const tickets = await store.dispatch('ticket/lList')
     return { tickets }
-  },
-  data () {
-    return {}
-  },
-  computed: {
-    // allTickets () {
-    //   return this.$store.getters('ticket/allTickets')
-    // }
   },
   methods: {
     ticketMore (e) {
@@ -39,7 +31,7 @@ export default {
       item.classList.toggle('ticket-open')
     },
     ticketEdit (ticket) {
-      this.$router.push(`/ticket/${ticket.id}`)
+      this.$router.push(`/ticket/${ticket._id}`)
     },
     ticketClose (ticket) {
       if (confirm('Закрыть данный тикет?')) {

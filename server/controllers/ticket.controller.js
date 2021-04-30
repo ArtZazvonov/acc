@@ -1,3 +1,4 @@
+/* eslint-disable node/handle-callback-err */
 const Ticket = require('../models/ticket.model')
 const Comment = require('../models/commentsTicket.model.js')
 module.exports.createTicket = async (req, res) => {
@@ -15,7 +16,7 @@ module.exports.createTicket = async (req, res) => {
   }
 }
 
-module.exports.getAllTicket = async (req, res) => {
+module.exports.getTicketLList = async (req, res) => {
   try {
     const tickets = await Ticket.find().sort({ date: -1 })
     res.json(tickets)
@@ -26,10 +27,13 @@ module.exports.getAllTicket = async (req, res) => {
 
 module.exports.getTicket = async (req, res) => {
   try {
-    // /:id
-    await Ticket.findById(req.params.id).populate('comments').exec((_error, ticket) => {
-      res.json(ticket)
-    })
+    const ticket = await Ticket.findById(req.params.id)
+    res.json(ticket)
+    // const ticket = await Ticket.findById(req.params.id).populate('comments').exec((error, ticket) => {
+    //   console.log(req.params)
+    //   console.log(ticket)
+    // })
+    // res.json(ticket)
   } catch (e) {
     res.status(500).json(e)
   }

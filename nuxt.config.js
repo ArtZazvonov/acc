@@ -1,6 +1,7 @@
 /* eslint-disable nuxt/no-cjs-in-config */
 require('dotenv').config()
 module.exports = {
+  telemetry: false,
   publicRuntimeConfig: {
     baseURL: process.env.NODE_ENV === 'production' ? 'http://localhost:3000' : 'http://localhost:3000'
   },
