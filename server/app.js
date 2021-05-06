@@ -9,7 +9,8 @@ const ticketRoutes = require('./routes/ticket.routes')
 const keys = require('./keys')
 const app = express()
 
-mongoose.connect(keys.MONGO_URI)
+mongoose.set('useFindAndModify', false)
+mongoose.connect(keys.MONGO_URI, { useFindAndModify: false })
   .then(() => console.log('mongoDB connected...'))
   .catch(error => console.log('mongoDB connected ERROR: ' + error))
 

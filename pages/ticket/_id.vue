@@ -1,18 +1,20 @@
 <template>
   <div>
-    <pre>{{ ticket }}</pre>
     <button type="button" @click.prevent="$router.push('/ticket/list')">К списку тикетов</button>
-    <p>{{ ticket.id }}</p>
-    <p>{{ ticket.date }}</p>
-    <p>{{ ticket.client }}</p>
-    <p>{{ ticket.phone }}</p>
-    <p>{{ ticket.address }}</p>
+    <p>{{ localTicket.date }}</p>
+    <p>{{ localTicket.client }}</p>
+    <p>{{ localTicket.phone }}</p>
+    <p>{{ localTicket.address }}</p>
+    <div v-for="(item, index) in localTicket.comments" :key="index">
+      <p>item</p>
+    </div>
     <ValidationObserver ref="form" tag="form" @submit.prevent="onSubmit">
       <ValidationProvider v-slot="{ errors }" tag="div">
-        <textarea v-model="formData.description" type="text" rows="10" cols="40" />
+        <textarea v-model="localTicket.description" type="text" rows="10" cols="40" />
         <span class="validate-error">{{ errors[0] }}</span>
       </ValidationProvider>
       <button type="submit">Сохранить</button>
+      <button type="button" @click.prevent="removeTicket()">Удалить тикет</button>
     </ValidationObserver>
   </div>
 </template>
@@ -28,37 +30,36 @@ export default {
   },
   data () {
     return {
-      formData: {
-        id: '',
-        description: ''
-      }
+      localTicket: {}
     }
   },
   head () {
     return {
-      title: `Тикет | #${this.ticket.id}`
+      title: `Тикет | ${this.localTicket.client}`
     }
   },
-  created () {
-    this.formData.id = this.ticket.id
-    this.formData.description = this.ticket.description
+  mounted () {
+    this.localTicket = this.ticket
+    this.localTicket.views = true
   },
   methods: {
     onSubmit () {
       this.$refs.form.validate().then(async (success) => {
         if (success) {
           try {
-            const form = {
-              id: this.formData.id,
-              description: this.formData.description
-            }
-            await this.$store.dispatch('ticket/update', form)
+            await this.$store.dispatch('ticket/update', this.localTicket)
             this.$router.push('/ticket/list')
           } catch (e) {
             console.log(e)
           }
         }
       })
+    },
+    removeTicket () {
+      if (confirm('Удалить тикет?')) {
+        this.$store.dispatch('ticket/remove', this.localTicket._id)
+        this.$router.push('/ticket/list')
+      }
     }
   }
 }

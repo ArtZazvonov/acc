@@ -1,19 +1,20 @@
 <template>
   <div class="ticket-list">
-    <div v-for="(ticket, index) in tickets" :key="index" class="ticket">
+    <div v-for="(ticket, index) in ticketList" :key="index" class="ticket">
       <div class="ticket-header">
         <div class="ticket-header-cols ticket-date"><span>{{ ticket.date }}</span></div>
-        <div class="ticket-header-cols ticket-status"><span></span><b>{{ ticket.status }}</b></div>
-        <div class="ticket-header-cols ticket-number"># {{ ticket.id }}</div>
+        <select id="status" class="ticket-header-cols ticket-status" name="status" @change="onChangeTicketStatus($event, ticket)">
+          <option v-for="(select, index) in status" :key="index" :value="select.val" :selected="select.val == ticket.status">{{ select.name }}</option>
+        </select>
+        <div class="ticket-header-cols ticket-number"># {{ ticket._id }}</div>
         <div class="ticket-header-cols ticket-client">{{ ticket.client }}</div>
         <div class="ticket-header-cols ticket-phone"><a :href="'tel:'+ticket.phone">{{ ticket.phone }}</a></div>
         <div class="ticket-header-cols ticket-address">{{ ticket.address }}</div>
-        <button type="button" class="ticket-header-cols ticket-edit" @click.prevent="ticketEdit(ticket)">edit</button>
+        <button type="button" class="ticket-header-cols ticket-edit" @click.prevent="ticketEdit(ticket._id)">edit</button>
         <div class="ticket-header-cols ticket-more" @click.prevent="ticketMore($event)">more</div>
       </div>
       <div class="ticket-desc">
         <p>{{ ticket.description }}</p>
-        <button type="button" @click.prevent="ticketClose(ticket)">Выполнена</button>
       </div>
     </div>
   </div>
@@ -21,23 +22,34 @@
 
 <script>
 export default {
+  middleware: ['clientAuth'],
   async asyncData ({ store }) {
-    const tickets = await store.dispatch('ticket/lList')
-    return { tickets }
+    const ticketList = await store.dispatch('ticket/ticketList')
+    return { ticketList }
+  },
+  data () {
+    return {
+      status: [
+        { name: 'Новый', val: 0 },
+        { name: 'В работе', val: 1 },
+        { name: 'Нужен выезд', val: 2 },
+        { name: 'Ожидает действия клинта', val: 3 },
+        { name: 'Выполнен', val: 4 },
+        { name: 'Отложен', val: 5 },
+        { name: 'Закрыт', val: 6 }
+      ]
+    }
   },
   methods: {
     ticketMore (e) {
-      const item = e.target.closest('.ticket')
-      item.classList.toggle('ticket-open')
+      e.target.closest('.ticket').classList.toggle('ticket-open')
     },
-    ticketEdit (ticket) {
-      this.$router.push(`/ticket/${ticket._id}`)
+    ticketEdit (id) {
+      this.$router.push({ path: `/ticket/${id}` }) // -> /ticket/id
     },
-    ticketClose (ticket) {
-      if (confirm('Закрыть данный тикет?')) {
-        this.$store.dispatch('ticket/close', ticket)
-        this.tickets = this.tickets.filter(p => p.id !== ticket.id)
-      }
+    onChangeTicketStatus (e, ticket) {
+      ticket.status = e.target.value || 0
+      this.$store.dispatch('ticket/update', ticket)
     }
   }
 }

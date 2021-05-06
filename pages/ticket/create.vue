@@ -26,6 +26,7 @@
 
 <script>
 export default {
+  middleware: ['clientAuth'],
   data () {
     return {
       formData: {
@@ -41,13 +42,7 @@ export default {
       this.$refs.form.validate().then(async (success) => {
         if (success) {
           try {
-            const form = {
-              client: this.formData.client,
-              phone: this.formData.phone,
-              address: this.formData.address,
-              description: this.formData.description
-            }
-            await this.$store.dispatch('ticket/create', form)
+            await this.$store.dispatch('ticket/create', this.formData)
             this.$router.push('/ticket/list')
           } catch (e) {
             console.log(e)
