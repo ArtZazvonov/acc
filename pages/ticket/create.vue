@@ -33,7 +33,8 @@ export default {
         client: '',
         phone: '',
         address: '',
-        description: ''
+        description: '',
+        userID: this.$store.getters['auth/getUser'].userId || ''
       }
     }
   },

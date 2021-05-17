@@ -1,10 +1,14 @@
 <template>
-  <header class="header">
-    <div class="logo">
-      <span>aps</span>
-    </div>
-    <button v-if="isAuth" type="button" class="app-btn btn-login" @click.prevent="logOut">выход</button>
-  </header>
+  <el-row class="header" type="flex" align="middle">
+    <el-col :lg="2">
+      <div class="logo">
+        <span>aps</span>
+      </div>
+    </el-col>
+    <el-col :lg="2" :offset="20">
+      <button v-if="isAuth" type="button" class="app-btn btn-login" @click.prevent="logOut">выход</button>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -17,7 +21,6 @@ export default {
       return this.$store.getters['auth/isAuth']
     }
   },
-  mounted () {},
   methods: {
     logOut () {
       this.$store.dispatch('auth/LOGOUT')
@@ -28,21 +31,6 @@ export default {
 
 <style lang="scss" scoped>
   .header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo{}
-  .navigation{
-    ul{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      list-style: none;
-      li{}
-    }
-  }
-  .btn-login{
-    align-items: flex-end;
+    height: 100%;
   }
 </style>

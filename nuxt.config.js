@@ -20,7 +20,7 @@ module.exports = {
     ]
   },
   css: [
-    '@/assets/normalize.css',
+    'element-ui/lib/theme-chalk/index.css',
     '@/assets/scss/style.scss'
   ],
   plugins: [
@@ -42,9 +42,7 @@ module.exports = {
     systemvars: true
   },
   styleResources: {
-    scss: [
-      '@/assets/scss/styleResource/variables.scss'
-    ]
+    scss: []
   },
   build: {
     extractCSS: true,
@@ -53,6 +51,6 @@ module.exports = {
         chunks: 'all'
       }
     },
-    transpile: ['vee-validate/dist/rules']
+    transpile: ['vee-validate/dist/rules', /^element-ui/]
   }
 }

@@ -1,11 +1,11 @@
 <template>
-  <div>admin</div>
+  <h1>admin</h1>
 </template>
 
 <script>
 export default {
-  layout: 'admin',
-  middleware: ['clientAuth']
+  layout: 'admin'
+  // middleware: ['adminAuth']
 }
 </script>
 

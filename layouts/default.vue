@@ -1,20 +1,19 @@
 <template>
-  <div class="container-app">
-    <div class="app-aside" :class="{'app-aside-hide': asideHide}">
-      <Aside />
-    </div>
-    <div class="app-content">
-      <div class="app-content__header"><Navigation /></div>
-      <div class="app-content__main"><Nuxt /></div>
-      <div class="app-content__footer"><Footer /></div>
-    </div>
-  </div>
+  <el-container class="page-layout">
+    <el-header><Navigation /></el-header>
+    <el-container>
+      <el-aside width="200px"><Aside /></el-aside>
+      <el-main><Nuxt /></el-main>
+      <button type="button" class="btn-create-ticket" @click.prevent="$router.push('/ticket/create')"><i class="icon-plus-solid"></i></button>
+    </el-container>
+    <el-footer><Footer /></el-footer>
+  </el-container>
 </template>
 
 <script>
 import Navigation from '@/components/client/Navigation'
-import Footer from '@/components/client/Footer'
 import Aside from '@/components/client/Aside'
+import Footer from '@/components/Footer'
 export default {
   components: {
     Navigation,
@@ -27,17 +26,12 @@ export default {
   computed: {
     isError () {
       return this.$store.getters.isError
-    },
-    asideHide () {
-      return this.$store.state.clientUX.asideState
     }
   },
   watch: {
     isError (val) {
       alert(val.response.data.messege)
     }
-  },
-  mounted () {},
-  methods: {}
+  }
 }
 </script>

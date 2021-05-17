@@ -3,31 +3,48 @@ import CookieJs from 'js-cookie'
 import jwtDecode from 'jwt-decode'
 export const state = () => ({
   token: null,
-  userRole: null
+  user: null
 })
 export const getters = {
+  getUser: state => state.user,
   isAuth: state => Boolean(state.token),
-  token: state => state.token,
-  userRole: state => state.userRole
+  token: state => state.token
 }
 export const mutations = {
   setToken (state, token) {
     state.token = token
   },
-  setRole (state, role) {
-    state.userRole = role
+  setUser (state, user) {
+    state.user = user
   },
   clearToken (state) {
     state.token = null
-    state.userRole = null
+  },
+  clearUser (state) {
+    state.user = null
   }
 }
 export const actions = {
+  // ADMIN ACTIONS
+  async ADMIN_LOGIN ({ commit, dispatch }, formData) {
+    try {
+      const token = await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve('admin-token')
+        }, 1000)
+      })
+      dispatch('setToken', token)
+    } catch (error) {
+      commit('SET_ERROR', error, { root: true })
+      throw error
+    }
+  },
+  // CLIENT ACTIONS
   async LOGIN ({ commit, dispatch }, formData) {
     try {
-      const { token, userRole } = await this.$axios.$post('/api/auth/login', formData)
+      const { token } = await this.$axios.$post('/api/login', formData)
       dispatch('setToken', token)
-      dispatch('setRole', userRole)
+      dispatch('setUser', isTokenDecode(token))
     } catch (error) {
       commit('SET_ERROR', error, { root: true })
       throw error
@@ -36,6 +53,7 @@ export const actions = {
   LOGOUT ({ commit }) {
     this.$axios.setToken(false)
     commit('clearToken')
+    commit('clearUser')
     CookieJs.remove('jwt-token')
     this.$router.push('/login?messege=logout')
   },
@@ -45,6 +63,7 @@ export const actions = {
     const token = cookies['jwt-token']
     if (isJwtValid(token)) {
       dispatch('setToken', token)
+      dispatch('setUser', isTokenDecode(token))
     } else {
       dispatch('LOGOUT')
     }
@@ -54,11 +73,16 @@ export const actions = {
     commit('setToken', token)
     CookieJs.set('jwt-token', token)
   },
-  setRole ({ commit }, userRole) {
-    commit('setRole', userRole)
+  setUser ({ commit }, user) {
+    commit('setUser', user)
   }
 }
 
+function isTokenDecode (token) {
+  if (!token) { return {} }
+  const { login, name, role, userId } = jwtDecode(token) || {}
+  return { login, name, role, userId }
+}
 function isJwtValid (token) {
   if (!token) { return false }
   const jwtData = jwtDecode(token) || {}

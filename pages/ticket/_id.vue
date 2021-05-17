@@ -1,12 +1,15 @@
 <template>
   <div>
     <button type="button" @click.prevent="$router.push('/ticket/list')">К списку тикетов</button>
-    <p>{{ localTicket.date }}</p>
-    <p>{{ localTicket.client }}</p>
-    <p>{{ localTicket.phone }}</p>
-    <p>{{ localTicket.address }}</p>
-    <div v-for="(item, index) in localTicket.comments" :key="index">
-      <p>item</p>
+    <!-- <pre>{{ ticket }}</pre> -->
+    <!-- <p><strong>Дата создания: </strong>{{ ticket.date }}</p>
+    <p><strong>Клиент: </strong>{{ ticket.client }}</p>
+    <p><strong>Телефон: </strong>{{ ticket.phone }}</p>
+    <p><strong>Адрес: </strong>{{ ticket.address }}</p>
+    <p><strong>Комментарии: </strong></p>
+    <div v-for="(item, index) in ticket.comments" :key="index">
+      <p><strong>{{ item.date }}</strong> <span>{{ item.postedBy }}</span></p>
+      <p>{{ item.text }}</p>
     </div>
     <ValidationObserver ref="form" tag="form" @submit.prevent="onSubmit">
       <ValidationProvider v-slot="{ errors }" tag="div">
@@ -15,7 +18,7 @@
       </ValidationProvider>
       <button type="submit">Сохранить</button>
       <button type="button" @click.prevent="removeTicket()">Удалить тикет</button>
-    </ValidationObserver>
+    </ValidationObserver> -->
   </div>
 </template>
 

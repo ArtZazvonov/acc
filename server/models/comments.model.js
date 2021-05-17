@@ -1,9 +1,13 @@
 const { model, Schema } = require('mongoose')
 
 const commentSchema = new Schema({
-  name: {
-    type: String,
-    required: true
+  createUser: {
+    ref: 'User',
+    type: Schema.Types.ObjectId
+  },
+  ticketID: {
+    ref: 'Ticket',
+    type: Schema.Types.ObjectId
   },
   text: {
     type: String,
@@ -12,11 +16,7 @@ const commentSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
-  },
-  ticketId: {
-    ref: 'tickets',
-    type: Schema.Types.ObjectId
   }
 })
 
-module.exports = model('comment', commentSchema)
+module.exports = model('Comment', commentSchema)

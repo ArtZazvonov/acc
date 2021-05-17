@@ -10,7 +10,7 @@
 
 <script>
 import Navigation from '@/components/client/Navigation'
-import Footer from '@/components/client/Footer'
+import Footer from '@/components/Footer'
 export default {
   components: {
     Navigation,

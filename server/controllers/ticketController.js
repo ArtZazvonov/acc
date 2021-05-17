@@ -1,17 +1,20 @@
 /* eslint-disable node/handle-callback-err */
 const Ticket = require('../models/ticket.model')
-// const Comment = require('../models/commentsTicket.model.js')
-// Контроллер создания тикета
+const Comment = require('../models/comments.model')
+
+// Контроллер для создания тикета
 module.exports.createTicket = async (req, res) => {
-  const ticket = new Ticket({
-    client: req.body.client,
-    address: req.body.address,
-    phone: req.body.phone,
-    description: req.body.description
-  })
   try {
+    const ticket = new Ticket({
+      createUser: req.body.userID,
+      client: req.body.client,
+      address: req.body.address,
+      phone: req.body.phone,
+      description: req.body.description
+    })
     await ticket.save()
-    res.status(201).json(ticket)
+      .then(function (ticket) { res.status(201).json(ticket) })
+      .catch(function (err) { console.log(err) })
   } catch (e) {
     res.status(500).json(e)
   }
@@ -19,7 +22,7 @@ module.exports.createTicket = async (req, res) => {
 // Контроллер для получения списка тикетов
 module.exports.getTicketLList = async (req, res) => {
   try {
-    const tickets = await Ticket.find().sort({ date: -1 })
+    const tickets = await Ticket.find().populate('comments').populate('createUser', 'name').sort({ date: -1 })
     res.json(tickets)
   } catch (e) {
     res.status(500).json(e)
@@ -28,8 +31,11 @@ module.exports.getTicketLList = async (req, res) => {
 // Контроллер для получения тикета
 module.exports.getTicket = async (req, res) => {
   try {
-    const ticket = await Ticket.findById(req.params.id)
-    res.json(ticket)
+    await Ticket.find({ _id: req.params.id })
+      .populate('comments').populate('createUser', 'name')
+      .exec((error, ticket) => {
+        res.json(ticket)
+      })
   } catch (e) {
     res.status(500).json(e)
   }
@@ -54,6 +60,27 @@ module.exports.removeTicket = async (req, res) => {
   try {
     await Ticket.deleteOne({ _id: req.params.id })
     res.json({ message: 'Тикет удален' })
+  } catch (e) {
+    res.status(500).json(e)
+  }
+}
+// Контроллер для добавления комментария
+module.exports.createTicketComment = async (req, res) => {
+  const comment = new Comment({
+    text: req.body.text,
+    ticketID: req.body.ticketID,
+    createUser: req.body.authorID
+  })
+  try {
+    await comment.save()
+    res.status(201).json(comment)
+    // .then(function (comment) {
+    //   res.status(201).json(comment)
+    // })
+    // .catch(function (err) { console.log(err) })
+    const ticket = await Ticket.findById(req.body.ticketID)
+    ticket.comments.push(comment)
+    await ticket.save()
   } catch (e) {
     res.status(500).json(e)
   }

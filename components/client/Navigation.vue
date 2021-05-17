@@ -1,10 +1,15 @@
 <template>
   <header class="header">
     <div class="logo">
-      <span>aps</span>
+      <nuxt-link to="/">ticket manager</nuxt-link>
     </div>
-    <button type="button" class="app-btn btn-login" @click.prevent="$router.push('/ticket/create')">Создать тикет</button>
-    <button v-if="isAuth" type="button" class="app-btn btn-login" @click.prevent="logOut">выход</button>
+    <div v-if="isAuth" class="user-control">
+      <div class="user-control__img">
+        <i class="icon-user-solid"></i>
+      </div>
+      <!-- <span class="user-control__name">{{ user.name.first }}</span> -->
+      <button type="button" class="btn btn-login" @click.prevent="logOut">выход</button>
+    </div>
   </header>
 </template>
 
@@ -14,6 +19,9 @@ export default {
     return {}
   },
   computed: {
+    user () {
+      return this.$store.getters['auth/getUser']
+    },
     isAuth () {
       return this.$store.getters['auth/isAuth']
     }
@@ -27,23 +35,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  .header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo{}
-  .navigation{
-    ul{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      list-style: none;
-      li{}
-    }
-  }
-  .btn-login{
-    align-items: flex-end;
-  }
-</style>
+<style lang="scss" scoped></style>

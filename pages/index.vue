@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <h2>Система обработки заявок</h2>
-  </div>
+  <el-row type="flex">
+    <el-col :lg="24">Главная страница</el-col>
+  </el-row>
 </template>
 
 <script>
 export default {
-  middleware: ['clientAuth']
+  // middleware: ['clientAuth']
 }
 </script>

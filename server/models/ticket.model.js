@@ -1,27 +1,25 @@
 const { model, Schema } = require('mongoose')
 
 const ticketSchema = new Schema({
+  createUser: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
   client: {
     type: String
-    // unique: true,
-    // required: true
   },
   address: {
     type: String
-    // unique: true,
-    // required: false
   },
   phone: {
     type: String
-    // unique: true
   },
   date: {
     type: Date,
     default: Date.now
   },
   description: {
-    type: String,
-    minLength: 6
+    type: String
   },
   views: {
     type: Boolean,
@@ -40,10 +38,10 @@ const ticketSchema = new Schema({
   },
   comments: [
     {
-      type: Schema.Types.ObjectId,
-      ref: 'comments'
+      ref: 'Comment',
+      type: Schema.Types.ObjectId
     }
   ]
 })
 
-module.exports = model('ticket', ticketSchema)
+module.exports = model('Ticket', ticketSchema)

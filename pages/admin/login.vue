@@ -1,27 +1,38 @@
 <template>
-  <ValidationObserver ref="form" tag="form" @submit.prevent="onSubmit">
-    <ValidationProvider v-slot="{ errors }" tag="div" name="login" vid="login" rules="">
-      <label for="login">Логин</label>
-      <input v-model="formData.login" type="text" name="login">
-      <span class="validate-error">{{ errors[0] }}</span>
-    </ValidationProvider>
-    <ValidationProvider v-slot="{ errors }" tag="div" name="password" vid="password" rules="">
-      <label for="password">Пароль</label>
-      <input v-model="formData.password" type="password" name="password">
-      <span class="validate-error">{{ errors[0] }}</span>
-    </ValidationProvider>
-    <button type="submit">Войти</button>
-  </ValidationObserver>
+  <el-card>
+    <h2 slot="header">Авторизация</h2>
+    <el-form ref="form" :model="formData" label-width="120px" :rules="rules">
+      <el-form-item label="Логин" prop="login" error>
+        <el-input v-model="formData.login" />
+      </el-form-item>
+      <el-form-item label="Пароль" prop="password">
+        <el-input v-model="formData.password" type="password" autocomplete="off" />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" :loading="loading" @click.prevent="onSubmit()">Войти</el-button>
+      </el-form-item>
+    </el-form>
+  </el-card>
 </template>
 
 <script>
 export default {
-  layout: 'login',
+  layout: 'empty',
   data () {
     return {
+      loading: false,
       formData: {
         login: '',
         password: ''
+      },
+      rules: {
+        login: [
+          { required: true, messege: 'Это поле обязатеьно для заполнения', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: 'Это поле обязатеьно для заполнения', trigger: 'blur' },
+          { min: 5, message: 'Пароль не менее 6 символов', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -29,28 +40,29 @@ export default {
     const { messege } = this.$route.query
     switch (messege) {
       case 'login':
-        alert('Выполните вход в истему')
+        this.$message.info('Выполните вход в истему')
         break
       case 'logout':
-        alert('Вы вышли из системы')
+        this.$message.success('Вы вышли из системы')
         break
       case 'session':
-        alert('Вы давно не заходили, нужно авторизоваться')
+        this.$message.info('Вы давно не заходили, нужно авторизоваться')
         break
     }
   },
   methods: {
     onSubmit () {
-      this.$refs.form.validate().then(async (success) => {
-        if (success) {
+      this.$refs.form.validate(async (valid) => {
+        if (valid) {
+          this.loading = true
           try {
-            const form = {
-              login: this.formData.login,
-              password: this.formData.password
-            }
-            await this.$store.dispatch('auth/LOGIN', form)
-            this.$router.push('/')
-          } catch (error) {}
+            await this.$store.dispatch('auth/ADMIN_LOGIN', this.formData)
+            this.loading = false
+            this.$router.push('/admin')
+          } catch (error) {
+            this.loading = false
+            return false
+          }
         }
       })
     }
