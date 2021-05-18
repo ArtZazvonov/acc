@@ -1,7 +1,7 @@
 <template>
   <el-card>
-    <h2 slot="header">Авторизация</h2>
-    <el-form ref="form" :model="formData" label-width="120px" :rules="rules">
+    <h2 slot="header" style="text-align: center">Панель администратора</h2>
+    <el-form ref="form" :model="formData" :rules="rules">
       <el-form-item label="Логин" prop="login" error>
         <el-input v-model="formData.login" />
       </el-form-item>
@@ -56,7 +56,7 @@ export default {
         if (valid) {
           this.loading = true
           try {
-            await this.$store.dispatch('auth/ADMIN_LOGIN', this.formData)
+            await this.$store.dispatch('auth/LOGIN', this.formData)
             this.loading = false
             this.$router.push('/admin')
           } catch (error) {

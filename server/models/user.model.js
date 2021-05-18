@@ -1,14 +1,12 @@
 const { model, Schema } = require('mongoose')
 
 const userSchema = new Schema({
-  name: {
-    first: {
-      type: String,
-      required: true
-    },
-    last: {
-      type: String
-    }
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String
   },
   login: {
     type: String,
@@ -20,13 +18,15 @@ const userSchema = new Schema({
     required: true,
     minLength: 6
   },
+  phone: {
+    type: Number
+  },
+  photo: {
+    type: String
+  },
   role: {
     type: Number,
     default: 0
   }
 })
-userSchema.virtual('fullName').get(function () {
-  return this.name.first + ' ' + this.name.last
-})
-userSchema.set('toObject', { virtuals: true })
 module.exports = model('User', userSchema)

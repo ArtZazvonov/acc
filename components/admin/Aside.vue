@@ -16,7 +16,7 @@
         <i class="el-icon-edit-outline"></i>
         <span slot="title">Тикеты</span>
       </template>
-      <el-menu-item index="1">
+      <el-menu-item index="/admin/ticket/list">
         <i class="el-icon-tickets" />
         <span>Список тикетов</span>
       </el-menu-item>
@@ -26,11 +26,11 @@
         <i class="el-icon-user"></i>
         <span slot="title">Пользователи</span>
       </template>
-      <el-menu-item index="/admin/users">
+      <el-menu-item index="/admin/user/list">
         <i class="el-icon-document" />
         <span> Список пользователей</span>
       </el-menu-item>
-      <el-menu-item index="/admin/createUser">
+      <el-menu-item index="/admin/user/create">
         <i class="el-icon-plus" />
         <span>Создание пользователя</span>
       </el-menu-item>

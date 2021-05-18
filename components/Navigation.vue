@@ -5,8 +5,11 @@
         <span>aps</span>
       </div>
     </el-col>
-    <el-col :lg="2" :offset="20">
-      <button v-if="isAuth" type="button" class="app-btn btn-login" @click.prevent="logOut">выход</button>
+    <el-col :lg="2" :offset="18">
+        <el-avatar :size="40" icon="el-icon-user-solid"></el-avatar>
+    </el-col>
+    <el-col :lg="2">
+      <el-button v-if="isAuth" type="primary" @click.prevent="logOut">Выход</el-button>
     </el-col>
   </el-row>
 </template>
@@ -14,7 +17,9 @@
 <script>
 export default {
   data () {
-    return {}
+    return {
+      circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+    }
   },
   computed: {
     isAuth () {

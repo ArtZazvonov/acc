@@ -4,11 +4,15 @@
 
 <script>
 export default {
-  layout: 'admin'
-  // middleware: ['adminAuth']
+  layout: 'admin',
+  middleware: ['adminAuth'],
+  computed: {
+    isUser () {
+      return this.$store.getters['auth/user']
+    }
+  },
+  mounted () {
+    console.log(this.isUser)
+  }
 }
 </script>
-
-<style scoped lang="scss">
-
-</style>

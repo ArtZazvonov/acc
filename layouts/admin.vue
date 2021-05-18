@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Navigation from '@/components/admin/Navigation'
+import Navigation from '@/components/Navigation'
 import Aside from '@/components/admin/Aside'
 import Footer from '@/components/Footer'
 export default {

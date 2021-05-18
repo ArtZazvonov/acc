@@ -15,7 +15,7 @@ export const actions = {
   },
   async ticketList ({ commit }) {
     try {
-      return await this.$axios.$get('/api/ticket/ticketList')
+      return await this.$axios.$get('/api/ticket/List')
     } catch (e) {
       commit('SET_ERROR', e, { root: true })
       throw e

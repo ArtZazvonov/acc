@@ -2,10 +2,12 @@ import Cookie from 'cookie'
 import CookieJs from 'js-cookie'
 import jwtDecode from 'jwt-decode'
 export const state = () => ({
+  userRight: null,
   token: null,
-  user: null
+  user: {}
 })
 export const getters = {
+  adminAccess: sate => state.userRight,
   getUser: state => state.user,
   isAuth: state => Boolean(state.token),
   token: state => state.token
@@ -25,20 +27,6 @@ export const mutations = {
   }
 }
 export const actions = {
-  // ADMIN ACTIONS
-  async ADMIN_LOGIN ({ commit, dispatch }, formData) {
-    try {
-      const token = await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve('admin-token')
-        }, 1000)
-      })
-      dispatch('setToken', token)
-    } catch (error) {
-      commit('SET_ERROR', error, { root: true })
-      throw error
-    }
-  },
   // CLIENT ACTIONS
   async LOGIN ({ commit, dispatch }, formData) {
     try {
@@ -74,6 +62,7 @@ export const actions = {
     CookieJs.set('jwt-token', token)
   },
   setUser ({ commit }, user) {
+    console.log(user)
     commit('setUser', user)
   }
 }

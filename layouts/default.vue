@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Navigation from '@/components/client/Navigation'
+import Navigation from '@/components/Navigation'
 import Aside from '@/components/client/Aside'
 import Footer from '@/components/Footer'
 export default {
