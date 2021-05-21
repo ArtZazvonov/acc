@@ -1,6 +1,6 @@
 <template>
   <el-container class="page-layout">
-    <el-header style="border-bottom: 1px solid #000;"><Navigation /></el-header>
+    <el-header class="header"><Navigation /></el-header>
     <el-container>
       <el-aside><Aside /></el-aside>
       <el-main><Nuxt /></el-main>

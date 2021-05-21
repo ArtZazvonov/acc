@@ -1,45 +1,49 @@
 <template>
   <div>
-    <h2 class="page-title">Список тикетов</h2>
-    <div class="ticket-list">
-      <!-- <div v-for="(ticket, index) in ticketList" :key="index" class="ticket">
-        <div class="ticket-info">
-          <div class="ticket-info__col ticket-id">#1</div>
-          <div class="ticket-info__col ticket-author">
-            <span>{{ ticket.createUser.name.first }}</span>
-            <span>{{ ticket.createUser.name.last }}</span>
-          </div>
-          <div class="ticket-info__col ticket-date"><span>{{ ticket.date }}</span></div>
-          <select id="status" class="ticket-info__col ticket-status" name="status" @change="onChangeTicketStatus($event, ticket)">
-            <option v-for="(select, index) in status" :key="index" :value="select.val" :selected="select.val == ticket.status">{{ select.name }}</option>
-          </select>
-          <div class="ticket-info__col ticket-client">{{ ticket.client }}</div>
-          <div class="ticket-info__col ticket-phone"><a :href="'tel:'+ticket.phone">{{ ticket.phone }}</a></div>
-          <div class="ticket-info__col ticket-address">{{ ticket.address }}</div>
-          <div type="button" class="ticket-edit" @click.prevent="ticketEdit(ticket._id)">
-            <i class="icon-edit-solid"></i></div>
-          <div class="ticket-more" @click.prevent="ticketMore($event)">
-            <i class="icon-caret-down-solid"></i></div>
-        </div>
-        <div class="ticket-desc">
-          <h3>Описание тикета:</h3>
-          <p>{{ ticket.description }}</p>
-          <h3>Комментарии:</h3>
-          <div v-for="(item, index) in ticket.comments" :key="index">
-            <pre>{{ item }}</pre>
-            <p><span>{{ item.date }} </span>{{ item.text }}</p>
-          </div>
+    <el-row type="flex">
+      <el-col><h2 class="page-title">Список тикетов</h2></el-col>
+      <el-col><el-input v-model="search" placeholder="Поиск по клиенту" /></el-col>
+    </el-row>
+    <el-table :data="ticketList.filter(data => !search || data.client.toLowerCase().includes(search.toLowerCase()))" style="width: 100%" max-height="350">
+      <el-table-column fixed prop="description" type="expand">
+        <template slot-scope="props">
+          <p><strong>Описаие:</strong> {{ props.row.description }}</p>
+          <p><strong>Комментарии:</strong> {{ props.row.commens }}</p>
           <h3>Оставить свой комментарий:</h3>
-          <ValidationObserver ref="form" tag="form" @submit.prevent="onSubmit(ticket._id)">
+          <el-form ref="form" :model="newComment" :rules="rules">
+            <el-form-item label="Текст комментария" prop="comment">
+              <el-input v-model="newComment.text" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" :loading="loading" @click.prevent="onSubmit()">Добавитьь комментарий</el-button>
+            </el-form-item>
+          </el-form>
+          <!-- <ValidationObserver ref="form" tag="form" @submit.prevent="onSubmit(ticket._id)">
             <ValidationProvider v-slot="{ errors }" tag="div">
               <textarea v-model="newComment.text" type="text" rows="5" />
               <span class="validate-error">{{ errors[0] }}</span>
             </ValidationProvider>
             <button type="submit" class="btn">Добавитьь комментарий</button>
-          </ValidationObserver>
-        </div>
-      </div> -->
-    </div>
+          </ValidationObserver> -->
+        </template>
+      </el-table-column>
+      <el-table-column fixed prop="date" sortable label="Дата" width="160" />
+      <el-table-column prop="status" sortable label="Статус" width="200">
+        <template slot-scope="{ row }">
+          <el-select v-model="row.status" placeholder="Select" @change="onChangeTicketStatus(row)">
+            <el-option v-for="item in status" :key="item.value" :label="item.name" :value="item.val" />
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column prop="client" sortable label="Клиент" />
+      <el-table-column prop="address" label="Адрес" />
+      <el-table-column prop="phone" label="Телефон" />
+      <el-table-column fixed="right">
+        <template slot-scope="{ row }">
+          <el-button type="primary" icon="el-icon-edit" circle @click.native.prevent="ticketEdit(row._id)" />
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -52,6 +56,9 @@ export default {
   },
   data () {
     return {
+      search: '',
+      loading: false,
+      dialogTableVisible: false,
       status: [
         { name: 'Новый', val: 0 },
         { name: 'В работе', val: 1 },
@@ -63,6 +70,11 @@ export default {
       ],
       newComment: {
         text: ''
+      },
+      rules: {
+        comment: [
+          { min: 10, messege: 'Минимум 10 символов', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -73,9 +85,9 @@ export default {
     ticketEdit (id) {
       this.$router.push({ path: `/ticket/${id}` }) // -> /ticket/id
     },
-    onChangeTicketStatus (e, ticket) {
-      ticket.status = e.target.value || 0
-      this.$store.dispatch('ticket/update', ticket)
+    onChangeTicketStatus (ticket) {
+      console.log(ticket)
+      // this.$store.dispatch('ticket/update', ticket)
     },
     async onSubmit (id) {
       const newComment = {
@@ -94,4 +106,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss"></style>

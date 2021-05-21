@@ -59,7 +59,7 @@ export default {
         ],
         password: [
           { required: true, message: 'Это поле обязатеьно для заполнения', trigger: 'blur' },
-          { min: 5, message: 'Пароль не менее 6 символов', trigger: 'blur' }
+          { min: 5, message: 'Пароль не менее 5 символов', trigger: 'blur' }
         ]
       }
     }
@@ -81,16 +81,20 @@ export default {
     },
     onSubmit () {
       this.$refs.form.validate(async (valid) => {
-        if (valid && this.formData.image) {
+        if (valid) {
           this.loading = true
           try {
             await this.$store.dispatch('user/CREATE_USER', this.formData)
             this.loading = false
-            this.$router.push('/admin')
+            this.$message.success('Пользователь создан')
+            this.$router.push('/admin/user/list')
           } catch (error) {
             this.loading = false
+            this.$message.warning('Ошибка при создании пользователя')
             console.log(error)
           }
+        } else {
+          this.$message.warning('Ошибка при создании пользователя')
         }
       })
     }

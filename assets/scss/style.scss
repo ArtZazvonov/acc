@@ -9,3 +9,21 @@ html, body{
 .page-layout{
   height: 100vh;
 }
+.aside{
+  width: 20vw !important;
+  max-width: 300px;
+  min-width: 250px;
+}
+.header{
+  height: 100%;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+}
+.logo{
+  a{
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 32px;
+    text-transform: uppercase;
+    color: #409EFF;
+  }  
+}

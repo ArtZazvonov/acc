@@ -2,12 +2,10 @@ import Cookie from 'cookie'
 import CookieJs from 'js-cookie'
 import jwtDecode from 'jwt-decode'
 export const state = () => ({
-  userRight: null,
   token: null,
-  user: {}
+  user: null
 })
 export const getters = {
-  adminAccess: sate => state.userRight,
   getUser: state => state.user,
   isAuth: state => Boolean(state.token),
   token: state => state.token
@@ -16,8 +14,8 @@ export const mutations = {
   setToken (state, token) {
     state.token = token
   },
-  setUser (state, user) {
-    state.user = user
+  setUser (state, authUser) {
+    state.user = authUser
   },
   clearToken (state) {
     state.token = null
@@ -27,12 +25,26 @@ export const mutations = {
   }
 }
 export const actions = {
-  // CLIENT ACTIONS
   async LOGIN ({ commit, dispatch }, formData) {
     try {
       const { token } = await this.$axios.$post('/api/login', formData)
-      dispatch('setToken', token)
-      dispatch('setUser', isTokenDecode(token))
+      await dispatch('setToken', token)
+      await dispatch('setUser', token)
+    } catch (error) {
+      commit('SET_ERROR', error, { root: true })
+      throw error
+    }
+  },
+  AUTOLOGIN ({ commit, dispatch }) {
+    try {
+      const cookieStr = process.browser ? document.cookie : this.app.context.req.headers.cookie
+      const cookies = Cookie.parse(cookieStr || '') || {}
+      const token = cookies['jwt-token']
+      if (isJwtValid(token)) {
+        dispatch('setToken', token)
+      } else {
+        dispatch('LOGOUT')
+      }
     } catch (error) {
       commit('SET_ERROR', error, { root: true })
       throw error
@@ -45,13 +57,16 @@ export const actions = {
     CookieJs.remove('jwt-token')
     this.$router.push('/login?messege=logout')
   },
-  AUTOLOGIN ({ dispatch }) {
-    const cookieStr = process.browser ? document.cookie : this.app.context.req.headers.cookie
-    const cookies = Cookie.parse(cookieStr || '') || {}
-    const token = cookies['jwt-token']
-    if (isJwtValid(token)) {
-      dispatch('setToken', token)
-      dispatch('setUser', isTokenDecode(token))
+  async setUser ({ commit, dispatch }, token) {
+    if (token) {
+      const jwtDecode = isTokenDecode(token)
+      try {
+        const user = await this.$axios.$get(`/api/userAuth/${jwtDecode.userId}`)
+        commit('setUser', user[0])
+      } catch (error) {
+        commit('SET_ERROR', error, { root: true })
+        throw error
+      }
     } else {
       dispatch('LOGOUT')
     }
@@ -60,17 +75,13 @@ export const actions = {
     this.$axios.setToken(token, 'Bearer')
     commit('setToken', token)
     CookieJs.set('jwt-token', token)
-  },
-  setUser ({ commit }, user) {
-    console.log(user)
-    commit('setUser', user)
   }
 }
 
 function isTokenDecode (token) {
   if (!token) { return {} }
-  const { login, name, role, userId } = jwtDecode(token) || {}
-  return { login, name, role, userId }
+  const { role, userId } = jwtDecode(token) || {}
+  return { role, userId }
 }
 function isJwtValid (token) {
   if (!token) { return false }

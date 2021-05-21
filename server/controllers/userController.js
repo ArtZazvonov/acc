@@ -7,16 +7,18 @@ module.exports.createUser = async (req, res) => {
     res.status(409).json({ message: 'Логин уже сужествует' })
   } else {
     const solt = bcrypt.genSaltSync(10)
-    console.log(req.file)
     const newUser = new User({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       login: req.body.login,
       password: bcrypt.hashSync(req.body.password, solt),
-      role: req.body.role,
-      image: ''
-      // photo: `/${req.file.filename}`
+      role: req.body.role
     })
+    if (req.file) {
+      newUser.image = `/${req.file.filename}`
+    } else {
+      newUser.image = ''
+    }
     try {
       await newUser.save()
       res.status(201).json(newUser)
@@ -49,7 +51,6 @@ module.exports.updateUser = async (req, res) => {
   const $set = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-    login: req.body.login,
     role: req.body.role
   }
   try {

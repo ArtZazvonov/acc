@@ -8,9 +8,10 @@ const router = Router()
 /* /api - главный роут */
 // Авторизация
 router.post('/login', authController.login) // роут авторизации на клиенте
+router.get('/userAuth/:id', authController.userAuth) // роут авторизации на клиенте
 /* ----- ADMIN ROUTES ----- */
 // Пользователи
-router.post('/admin/user/create', upload.single('image'), userController.createUser) // Роут для создания пользователя
+router.post('/admin/user/create', passport.authenticate('jwt', { session: false }), upload.single('image'), userController.createUser) // Роут для создания пользователя
 router.get('/admin/user/list', userController.listUser) // Роут для получения списка пользователей
 router.get('/admin/user/:id', userController.getUser) // Роут для получения конкретного пользователя
 router.put('/admin/user/:id', userController.updateUser) // Роут для измененя пользователя

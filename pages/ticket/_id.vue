@@ -1,6 +1,7 @@
 <template>
   <div>
     <button type="button" @click.prevent="$router.push('/ticket/list')">К списку тикетов</button>
+    {{ ticket }}
     <!-- <pre>{{ ticket }}</pre> -->
     <!-- <p><strong>Дата создания: </strong>{{ ticket.date }}</p>
     <p><strong>Клиент: </strong>{{ ticket.client }}</p>

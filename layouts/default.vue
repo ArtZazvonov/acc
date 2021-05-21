@@ -1,10 +1,9 @@
 <template>
   <el-container class="page-layout">
-    <el-header><Navigation /></el-header>
+    <el-header class="header"><Navigation /></el-header>
     <el-container>
-      <el-aside width="200px"><Aside /></el-aside>
+      <el-aside class="aside"><Aside /></el-aside>
       <el-main><Nuxt /></el-main>
-      <button type="button" class="btn-create-ticket" @click.prevent="$router.push('/ticket/create')"><i class="icon-plus-solid"></i></button>
     </el-container>
     <el-footer><Footer /></el-footer>
   </el-container>

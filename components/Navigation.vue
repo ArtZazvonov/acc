@@ -1,15 +1,22 @@
 <template>
-  <el-row class="header" type="flex" align="middle">
-    <el-col :lg="2">
+  <el-row type="flex" align="middle" justify="space-between" style="height: 100%">
+    <el-col :lg="6">
       <div class="logo">
-        <span>aps</span>
+        <nuxt-link :to="rout === '/admin' ? '/admin' : '/'">ticket manager</nuxt-link>
       </div>
     </el-col>
-    <el-col :lg="2" :offset="18">
-        <el-avatar :size="40" icon="el-icon-user-solid"></el-avatar>
-    </el-col>
-    <el-col :lg="2">
-      <el-button v-if="isAuth" type="primary" @click.prevent="logOut">Выход</el-button>
+    <el-col :lg="1">
+      <el-dropdown trigger="click">
+        <span>
+          <el-avatar v-if="isUserAuth.image" :size="40" :src="'/upload' + isUserAuth.image" />
+          <el-avatar v-else :size="40" icon="el-icon-user-solid" />
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>
+            <el-button v-if="isAuth" type="primary" @click.prevent="logOut">Выход</el-button>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </el-col>
   </el-row>
 </template>
@@ -18,13 +25,19 @@
 export default {
   data () {
     return {
-      circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+      rout: ''
     }
   },
   computed: {
     isAuth () {
       return this.$store.getters['auth/isAuth']
+    },
+    isUserAuth () {
+      return this.$store.getters['auth/getUser']
     }
+  },
+  created () {
+    this.rout = this.$route.fullPath
   },
   methods: {
     logOut () {
@@ -33,9 +46,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-  .header{
-    height: 100%;
-  }
-</style>

@@ -5,14 +5,6 @@
 <script>
 export default {
   layout: 'admin',
-  middleware: ['adminAuth'],
-  computed: {
-    isUser () {
-      return this.$store.getters['auth/user']
-    }
-  },
-  mounted () {
-    console.log(this.isUser)
-  }
+  middleware: ['adminAuth']
 }
 </script>

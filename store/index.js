@@ -1,3 +1,4 @@
+import Cookie from 'cookie'
 export const state = () => ({
   error: null
 })
@@ -13,7 +14,11 @@ export const mutations = {
   }
 }
 export const actions = {
-  nuxtServerInit ({ dispatch }) {
-    dispatch('auth/AUTOLOGIN')
+  async nuxtServerInit ({ dispatch }) {
+    const cookieStr = process.browser ? document.cookie : this.app.context.req.headers.cookie
+    const cookies = Cookie.parse(cookieStr || '') || {}
+    const token = cookies['jwt-token']
+    await dispatch('auth/AUTOLOGIN')
+    await dispatch('auth/setUser', token)
   }
 }

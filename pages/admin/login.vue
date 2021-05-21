@@ -48,6 +48,9 @@ export default {
       case 'session':
         this.$message.info('Вы давно не заходили, нужно авторизоваться')
         break
+      case 'right':
+        this.$message.info('Войдите с учатными данными администратора')
+        break
     }
   },
   methods: {

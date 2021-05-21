@@ -27,3 +27,14 @@ module.exports.login = async (req, res) => {
     })
   }
 }
+module.exports.userAuth = async (req, res) => {
+  try {
+    await User.find({ _id: req.params.id }).select({ password: 0, __v: 0 }).exec((_error, user) => {
+      res.json(user)
+    })
+  } catch (error) {
+    res.status(404).json({
+      messege: 'Пользователь не найден'
+    })
+  }
+}
