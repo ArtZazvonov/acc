@@ -1,6 +1,10 @@
 /* eslint-disable nuxt/no-cjs-in-config */
 require('dotenv').config()
 module.exports = {
+  // server: {
+  //   port: 3000,
+  //   host: '172.16.82.7'
+  // },
   telemetry: false,
   publicRuntimeConfig: {
     baseURL: process.env.NODE_ENV === 'production' ? 'http://localhost:3000' : 'http://localhost:3000'
@@ -30,7 +34,8 @@ module.exports = {
   ],
   components: true,
   buildModules: [
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/vuetify'
   ],
   modules: [
     '@nuxtjs/axios',

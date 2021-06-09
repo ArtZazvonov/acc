@@ -50,7 +50,10 @@ export default {
         lastName: '',
         login: '',
         password: '',
-        role: '',
+        role: {
+          name: '',
+          typeNumber: ''
+        },
         image: null
       },
       rules: {
@@ -80,18 +83,19 @@ export default {
       this.formData.image = file.raw
     },
     onSubmit () {
-      this.$refs.form.validate(async (valid) => {
+      this.$refs.form.validate((valid) => {
         if (valid) {
           this.loading = true
           try {
-            await this.$store.dispatch('user/CREATE_USER', this.formData)
-            this.loading = false
-            this.$message.success('Пользователь создан')
-            this.$router.push('/admin/user/list')
+            console.log(this.formData)
+            // await this.$store.dispatch('user/CREATE_USER', this.formData)
+            // this.loading = false
+            // this.$message.success('Пользователь создан')
+            // this.$router.push('/admin/user/list')
           } catch (error) {
-            this.loading = false
-            this.$message.warning('Ошибка при создании пользователя')
-            console.log(error)
+            // this.loading = false
+            // this.$message.warning('Ошибка при создании пользователя')
+            // console.log(error)
           }
         } else {
           this.$message.warning('Ошибка при создании пользователя')

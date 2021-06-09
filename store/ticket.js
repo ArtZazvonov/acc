@@ -45,9 +45,9 @@ export const actions = {
       throw e
     }
   },
-  async createComments ({ commit }, newComment) {
+  async createComment ({ commit }, newComment) {
     try {
-      return await this.$axios.$post('/api/comment/create', newComment)
+      return await this.$axios.$post('/api/ticket/comment/create', newComment)
     } catch (e) {
       commit('SET_ERROR', e, { root: true })
       throw e

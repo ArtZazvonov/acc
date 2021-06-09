@@ -1,20 +1,25 @@
 /* eslint-disable node/handle-callback-err */
 const Ticket = require('../models/ticket.model')
+const User = require('../models/user.model')
 const Comment = require('../models/comments.model')
 
 // Контроллер для создания тикета
 module.exports.createTicket = async (req, res) => {
   try {
     const ticket = new Ticket({
-      createUser: req.body.userID,
+      ticketAuthor: req.body.ticketAuthor,
       client: req.body.client,
       address: req.body.address,
       phone: req.body.phone,
-      description: req.body.description
+      description: req.body.description,
+      executor: req.body.executor ? req.body.executor : null
     })
-    await ticket.save()
-      .then(function (ticket) { res.status(201).json(ticket) })
-      .catch(function (err) { console.log(err) })
+    await ticket.save().then(function (ticket) { res.status(201).json(ticket) })
+    if (req.body.executor) {
+      const user = await User.findById(req.body.executor)
+      user.tickets.push(ticket)
+      await user.save()
+    }
   } catch (e) {
     res.status(500).json(e)
   }
@@ -22,7 +27,11 @@ module.exports.createTicket = async (req, res) => {
 // Контроллер для получения списка тикетов
 module.exports.getTicketLList = async (req, res) => {
   try {
-    const tickets = await Ticket.find().populate('comments').populate('createUser', 'name').sort({ date: -1 })
+    const tickets = await Ticket.find({}).populate('comments').sort({ date: -1 })
+    for (let i = 0; i < tickets.length; i++) {
+      const ticket = tickets[i]
+      ticket.comments = await Comment.find({ ticketID: ticket._id })
+    }
     res.json(tickets)
   } catch (e) {
     res.status(500).json(e)
@@ -32,8 +41,7 @@ module.exports.getTicketLList = async (req, res) => {
 module.exports.getTicket = async (req, res) => {
   try {
     await Ticket.find({ _id: req.params.id })
-      .populate('comments').populate('createUser', 'name')
-      .exec((error, ticket) => {
+      .populate('comments').exec((error, ticket) => {
         res.json(ticket)
       })
   } catch (e) {
@@ -42,10 +50,7 @@ module.exports.getTicket = async (req, res) => {
 }
 // Контроллер для обновления тикета
 module.exports.updateTicket = async (req, res) => {
-  const $set = {
-    status: req.body.status,
-    description: req.body.description
-  }
+  const $set = req.body
   try {
     const ticket = await Ticket.findOneAndUpdate({
       _id: req.params.id
@@ -67,17 +72,13 @@ module.exports.removeTicket = async (req, res) => {
 // Контроллер для добавления комментария
 module.exports.createTicketComment = async (req, res) => {
   const comment = new Comment({
-    text: req.body.text,
     ticketID: req.body.ticketID,
-    createUser: req.body.authorID
+    commentAuthor: req.body.commentAuthor,
+    commentText: req.body.commentText
   })
   try {
     await comment.save()
     res.status(201).json(comment)
-    // .then(function (comment) {
-    //   res.status(201).json(comment)
-    // })
-    // .catch(function (err) { console.log(err) })
     const ticket = await Ticket.findById(req.body.ticketID)
     ticket.comments.push(comment)
     await ticket.save()

@@ -1,9 +1,9 @@
 const { model, Schema } = require('mongoose')
 
+const options = { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 const ticketSchema = new Schema({
-  createUser: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
+  ticketAuthor: {
+    type: Object
   },
   client: {
     type: String
@@ -26,15 +26,12 @@ const ticketSchema = new Schema({
     default: false
   },
   status: {
-    // status 0 - Новый
-    // status 1 - В работе
-    // status 2 - Нужен выезд
-    // status 3 - Ожидает действия клинта
-    // status 4 - Выполнен
-    // status 5 - Отложен
-    // status 6 - Закрыт
     type: Number,
     default: 0
+  },
+  executor: {
+    ref: 'User',
+    type: Schema.Types.ObjectId
   },
   comments: [
     {
@@ -42,6 +39,6 @@ const ticketSchema = new Schema({
       type: Schema.Types.ObjectId
     }
   ]
-})
+}, options)
 
 module.exports = model('Ticket', ticketSchema)

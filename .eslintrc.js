@@ -18,6 +18,19 @@ module.exports = {
     'vue/singleline-html-element-content-newline': 'off',
     'vue/multiline-html-element-content-newline': 'off',
     'eslint-disable vue/html-indent': 'off',
-    'no-tabs': 0
+    'no-tabs': 0,
+    'vue/max-attributes-per-line': ['error', {
+      singleline: {
+        max: 15,
+        allowFirstLine: true
+      },
+      multiline: {
+        max: 15,
+        allowFirstLine: true
+      }
+    }],
+    'vue/valid-v-slot': ['error', {
+      allowModifiers: true
+    }]
   }
 }

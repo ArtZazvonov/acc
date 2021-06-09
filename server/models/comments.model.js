@@ -1,22 +1,22 @@
 const { model, Schema } = require('mongoose')
 
+const options = { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 const commentSchema = new Schema({
-  createUser: {
-    ref: 'User',
-    type: Schema.Types.ObjectId
-  },
   ticketID: {
     ref: 'Ticket',
     type: Schema.Types.ObjectId
   },
-  text: {
+  commentAuthor: {
+    type: Object
+  },
+  commentText: {
     type: String,
     required: true
   },
-  date: {
+  commentDate: {
     type: Date,
     default: Date.now
   }
-})
+}, options)
 
 module.exports = model('Comment', commentSchema)

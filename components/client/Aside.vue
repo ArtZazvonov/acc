@@ -20,6 +20,10 @@
         <i class="el-icon-tickets" />
         <span>Список тикетов</span>
       </el-menu-item>
+      <el-menu-item index="/ticket/create">
+        <i class="el-icon-plus" />
+        <span>Открыть тикет</span>
+      </el-menu-item>
     </el-submenu>
     <el-submenu index="2">
       <template slot="title">

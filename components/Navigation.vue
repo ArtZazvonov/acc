@@ -13,7 +13,10 @@
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>
-            <el-button v-if="isAuth" type="primary" @click.prevent="logOut">Выход</el-button>
+            <p v-if="isAuth" @click.prevent="routeProfile"><i class="el-icon-user" /> Профиль</p>
+          </el-dropdown-item>
+          <el-dropdown-item>
+            <p v-if="isAuth" @click.prevent="logOut"><i class="el-icon-back" /> Выход</p>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -42,6 +45,9 @@ export default {
   methods: {
     logOut () {
       this.$store.dispatch('auth/LOGOUT')
+    },
+    routeProfile () {
+      this.$router.push({ path: `/user/${this.isUserAuth._id}` })
     }
   }
 }

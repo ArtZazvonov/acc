@@ -25,6 +25,7 @@
 
 <script>
 export default {
+  middleware: ['clientAuth'],
   validate ({ params }) {
     return Boolean(params.id)
   },

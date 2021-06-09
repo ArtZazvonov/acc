@@ -10,9 +10,14 @@ module.exports.createUser = async (req, res) => {
     const newUser = new User({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
+      patronymic: req.body.patronymic,
       login: req.body.login,
+      phone: req.body.phone,
       password: bcrypt.hashSync(req.body.password, solt),
-      role: req.body.role
+      role: {
+        name: req.body.role.name,
+        typeNumber: req.body.role.typeNumber
+      }
     })
     if (req.file) {
       newUser.image = `/${req.file.filename}`
@@ -48,11 +53,7 @@ module.exports.getUser = async (req, res) => {
 }
 
 module.exports.updateUser = async (req, res) => {
-  const $set = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    role: req.body.role
-  }
+  const $set = req.body
   try {
     const user = await User.findOneAndUpdate({ _id: req.params.id }, { $set }, { new: true })
     res.json(user)
@@ -67,5 +68,14 @@ module.exports.removeUser = async (req, res) => {
     res.json({ message: 'Тикет удален' })
   } catch (e) {
     res.status(500).json(e)
+  }
+}
+
+module.exports.executorList = async (req, res) => {
+  try {
+    const executorList = await User.find({ role: 1 }).select({ password: 0 })
+    res.json(executorList)
+  } catch (error) {
+    res.status(500).json(error)
   }
 }

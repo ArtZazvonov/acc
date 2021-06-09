@@ -6,7 +6,9 @@ export const actions = {
     const formData = new FormData()
     formData.append('firstName', newUser.firstName)
     formData.append('lastName', newUser.lastName)
+    formData.append('patronymic', newUser.patronymic)
     formData.append('login', newUser.login)
+    formData.append('phone', newUser.phone)
     formData.append('password', newUser.password)
     formData.append('role', newUser.role)
     if (newUser.image) {
@@ -48,6 +50,16 @@ export const actions = {
   async UPDATE_USER ({ commit }, userData) {
     try {
       return await this.$axios.put(`/api/admin/user/${userData._id}`, userData)
+    } catch (error) {
+      commit('SET_ERROR', error, { root: true })
+      throw error
+    }
+  },
+  // Список исполнителей
+  async executorList ({ commit }) {
+    try {
+      const executorList = await this.$axios.$get('/api/user/executorList')
+      return executorList
     } catch (error) {
       commit('SET_ERROR', error, { root: true })
       throw error
