@@ -84,7 +84,7 @@
     </v-navigation-drawer>
 
     <v-main>
-      <v-container fluid>
+      <v-container fluid style="height: 100%">
         <Nuxt />
       </v-container>
     </v-main>

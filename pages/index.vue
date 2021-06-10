@@ -1,11 +1,16 @@
 <template>
-  <el-row type="flex">
-    <el-col :lg="24">Главная страница</el-col>
-  </el-row>
+  <div>
+    <h2>Система обработки заявок</h2>
+  </div>
 </template>
-
 <script>
 export default {
   middleware: ['clientAuth']
 }
 </script>
+<style lang="scss" scoped>
+  div{
+    display: flex;
+    justify-content: center;
+  }
+</style>

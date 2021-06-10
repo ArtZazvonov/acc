@@ -13,14 +13,14 @@
         </v-card-title>
         <v-card-text>
           <v-form ref="form" lazy-validation>
-            <v-text-field v-model="localUser.firstName" label="Ваше имя" />
             <v-text-field v-model="localUser.lastName" label="Ваша фамилия" />
+            <v-text-field v-model="localUser.firstName" label="Ваше имя" />
             <v-text-field v-model="localUser.patronymic" label="Ваше отчество" />
             <v-text-field v-model="localUser.phone" label="Номер телефона" />
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="success" :loading="loading" @click.prevent="onSubmit">Сохранить</v-btn>
+          <v-btn color="primary" :loading="loading" @click.prevent="onSubmit">Сохранить</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -31,28 +31,6 @@
       </v-card>
     </v-col>
   </v-row>
-  <!-- <el-card>
-    <h3 slot="header">Рекатрирование профиля</h3>
-    <el-form ref="form" :model="localUser" status-icon label-width="120px" label-position="top">
-      <el-avatar v-if="localUser.image" :src="'/upload' + localUser.image" />
-      <el-avatar v-else icon="el-icon-user-solid" />
-      <el-form-item label="Имя">
-        <el-input v-model="localUser.firstName" />
-      </el-form-item>
-      <el-form-item label="Фамилия">
-        <el-input v-model="localUser.lastName" />
-      </el-form-item>
-      <el-form-item label="Роль">
-        <el-select v-model="localUser.role" placeholder="Роль пользователя">
-          <el-option label="Администратор" value="0">Администратор</el-option>
-          <el-option label="Оператор" value="1">Оператор</el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" :loading="loading" @click.prevent="onSubmit()">Сохранить</el-button>
-      </el-form-item>
-    </el-form>
-  </el-card> -->
 </template>
 
 <script>
