@@ -30,7 +30,7 @@
           <a :href="`tel:+` + item.phone">{{ item.phone }}</a>
         </template>
         <template #[`item.executor`]="{ item }">
-          <v-select v-model="item.executor" :items="executorList" :item-text="item => item.firstName +' '+ item.lastName" item-value="_id" dense hide-details @change="onChangeTicket(item)" />
+          <v-select v-model="item.executor" :items="executorList" :item-text="item => item.firstName +' '+ item.lastName" item-value="_id" dense hide-details @change="onChangeTicketExecutor(item)" />
         </template>
         <template #[`item.actions`]="{ item }">
           <div class="buttons-groupe">
@@ -181,6 +181,9 @@ export default {
     },
     onChangeTicket (ticket) {
       this.$store.dispatch('ticket/update', ticket)
+    },
+    onChangeTicketExecutor (ticket) {
+      this.$store.dispatch('ticket/cangeTicketExecutor', ticket)
     },
     async onCommentSubmit (ticketId) {
       if (this.$refs.form.validate()) {

@@ -5,13 +5,14 @@
         <v-card-title>
           <div class="profile-header">
             <h3>Ваш профиль</h3>
-            <v-avatar size="48">
+            <pre>{{ authUser }}</pre>
+            <!-- <v-avatar size="48">
               <img v-if="localUser.image" :src="'/upload' + localUser.image">
               <img v-else src="https://cdn.vuetifyjs.com/images/logos/logo.svg" alt="Vuetify">
-            </v-avatar>
+            </v-avatar> -->
           </div>
         </v-card-title>
-        <v-card-text>
+        <!-- <v-card-text>
           <v-form ref="form" lazy-validation>
             <v-text-field v-model="localUser.lastName" label="Ваша фамилия" />
             <v-text-field v-model="localUser.firstName" label="Ваше имя" />
@@ -21,14 +22,14 @@
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" :loading="loading" @click.prevent="onSubmit">Сохранить</v-btn>
-        </v-card-actions>
+        </v-card-actions> -->
       </v-card>
     </v-col>
     <v-col cols="12" xs="12" sm="12" md="6" lg="6">
       <v-card>
         <v-card-title>Ваша статистика</v-card-title>
         <v-card-text>
-          {{ localUser }}
+          <!-- {{ localUser }} -->
         </v-card-text>
       </v-card>
     </v-col>
@@ -38,13 +39,13 @@
 <script>
 export default {
   middleware: ['clientAuth'],
-  validate ({ params }) {
-    return Boolean(params.id)
-  },
-  async asyncData ({ store, params }) {
-    const user = await store.dispatch('user/USER_ID', params.id)
-    return { user }
-  },
+  // validate ({ params }) {
+  //   return Boolean(params.id)
+  // },
+  // async asyncData ({ store, params }) {
+  //   const user = await store.dispatch('user/USER_ID', params.id)
+  //   return { user }
+  // },
   data () {
     return {
       userTickets: [],
@@ -53,12 +54,17 @@ export default {
     }
   },
   head () {
-    return {
-      title: `Пользователь | ${this.localUser.fullName}`
+    // return {
+    //   title: `Пользователь | ${this.localUser.fullName}`
+    // }
+  },
+  computed: {
+    authUser () {
+      return this.$store.getters['auth/getUser']
     }
   },
   created () {
-    this.localUser = this.user
+    // this.localUser = this.user
     // this.getUserTicket()
   },
   methods: {

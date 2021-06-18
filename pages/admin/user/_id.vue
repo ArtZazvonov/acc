@@ -46,7 +46,7 @@ export default {
     }
   },
   created () {
-    this.localUser = this.user[0]
+    this.localUser = this.user
   },
   methods: {
     onSubmit () {

@@ -61,8 +61,8 @@ export const actions = {
     if (token) {
       const jwtDecode = isTokenDecode(token)
       try {
-        const user = await this.$axios.$get(`/api/userAuth/${jwtDecode.userId}`)
-        commit('setUser', user[0])
+        const user = await this.$axios.$get(`/api/authorizedUser/${jwtDecode.userId}`)
+        commit('setUser', user)
       } catch (error) {
         commit('SET_ERROR', error, { root: true })
         throw error

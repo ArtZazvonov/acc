@@ -37,6 +37,14 @@ export const actions = {
       throw e
     }
   },
+  async cangeTicketExecutor ({ commit }, ticket) {
+    try {
+      return await this.$axios.$put(`/api/ticket/changeTicketExecutor/${ticket._id}`, ticket)
+    } catch (e) {
+      commit('SET_ERROR', e, { root: true })
+      throw e
+    }
+  },
   async remove ({ commit }, ticketID) {
     try {
       return await this.$axios.$delete(`/api/ticket/${ticketID}`)

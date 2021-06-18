@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt-nodejs')
 const User = require('../models/user.model')
+// const Ticket = require('../models/ticket.model')
 
 module.exports.createUser = async (req, res) => {
   const candidate = await User.findOne({ login: req.body.login })
@@ -44,7 +45,7 @@ module.exports.listUser = async (req, res) => {
 
 module.exports.getUser = async (req, res) => {
   try {
-    await User.find({ _id: req.params.id }).select({ password: 0 }).exec((_error, user) => {
+    await User.findById(req.params.id).select({ password: 0 }).exec((_error, user) => {
       res.json(user)
     })
   } catch (error) {

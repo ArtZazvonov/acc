@@ -60,6 +60,17 @@ module.exports.updateTicket = async (req, res) => {
     res.status(500).json(e)
   }
 }
+module.exports.changeTicketExecutor = async (req, res) => {
+  try {
+    const oldExecutor = await Ticket.findById(req.body._id, 'executor')
+    const newExecutor = await User.findById(req.body.executor).select('id')
+    await User.findOneAndUpdate({ _id: oldExecutor.executor }, { $pull: { tickets: req.body._id } })
+    await User.findOneAndUpdate({ _id: newExecutor._id }, { $push: { tickets: req.body._id } })
+    await Ticket.findOneAndUpdate({ _id: req.params.id }, { $set: { executor: req.body.executor } })
+  } catch (e) {
+    res.status(500).json(e)
+  }
+}
 // Контроллер для удаления тикета
 module.exports.removeTicket = async (req, res) => {
   try {
